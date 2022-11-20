@@ -17,6 +17,7 @@ def main():
     late_summer_paths = Util.image_preprocessing(orig_late_summer_files, new_late_summer_path)
     print('Complete Late Summer Preprocessing')
     Util.generate_histogram(early_summer_paths)
+    Util.generate_histogram(late_summer_paths)
 
 
 if __name__ == '__main__':
