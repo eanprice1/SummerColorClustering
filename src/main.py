@@ -1,5 +1,4 @@
 import Utility as Util
-import cv2
 
 
 def main():
@@ -16,8 +15,10 @@ def main():
     print('Completed Early Summer Preprocessing')
     late_summer_paths = Util.image_preprocessing(orig_late_summer_files, new_late_summer_path)
     print('Complete Late Summer Preprocessing')
-    Util.generate_histogram(early_summer_paths)
-    Util.generate_histogram(late_summer_paths)
+    Util.generate_histogram(early_summer_paths, 'Early Summer', 'Resources/Outputs/EarlySummerHistogram')
+    print('Generated and Saved Early Summer Histogram')
+    Util.generate_histogram(late_summer_paths, 'Late Summer', 'Resources/Outputs/LateSummerHistogram')
+    print('Generated and Saved Late Summer Histogram')
 
 
 if __name__ == '__main__':

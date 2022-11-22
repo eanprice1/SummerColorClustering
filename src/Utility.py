@@ -1,8 +1,7 @@
-import math
+import numpy as np
+from itertools import repeat
 import cv2
 import os
-
-import numpy
 from matplotlib import pyplot as plt
 
 
@@ -28,7 +27,8 @@ def image_preprocessing(file_to_path_lookup: dict, dest_dir_path) -> list:
     return file_paths
 
 
-def generate_histogram(file_paths: list):
+def generate_histogram(file_paths: list, title, dest_dir_path):
+    # read in images
     images = []
     for file_path in file_paths:
         image = cv2.imread(file_path, cv2.IMREAD_COLOR)
@@ -37,20 +37,41 @@ def generate_histogram(file_paths: list):
 
     # hue bins followed by saturation bins
     hist_size = [12, 4]
-
     # hue range followed by saturation range
     hist_ranges = [0, 180, 0, 256]
-
     channels = [0, 1]
 
+    # calculate histogram
     hist = cv2.calcHist(images, channels, None, hist_size, hist_ranges, accumulate=False)
-    print(f'shape: {hist.shape}')
-    (col1, col2, col3, col4) = numpy.split(hist, 4, 1)
-    plt.plot(col1, 'Red')
-    plt.plot(col2, 'Green')
-    plt.plot(col3, 'Blue')
-    plt.plot(col4, 'Black')
-    plt.xlabel('Hue Bin #')
-    plt.ylabel('# of Pixels')
-    plt.title('Pixels per Hue-Saturation Bin')
+
+    # create inputs to 3d bar chart
+    x_edges = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+    y_edges = np.array([1, 2, 3, 4])
+    x_pos, y_pos = np.meshgrid(x_edges * 2, y_edges, indexing='ij')
+    x_pos = x_pos.ravel()
+    y_pos = y_pos.ravel()
+    dx = list(repeat(1.5, 48))
+    dy = list(repeat(0.5, 48))
+    dz = hist.ravel()
+    max_val = dz.max()
+    min_val = dz.min()
+
+    # map colors
+    color_map = plt.cm.get_cmap('jet')
+    colors = [color_map((val - min_val)/max_val) for val in dz]
+
+    # create and display figure
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    ax.tick_params(axis='both', which='both', labelsize=8)
+    ax.bar3d(x_pos, y_pos, 0, dx, dy, dz, color=colors)
+    plt.xticks(x_edges[::2] * 2, x_edges[::2])
+    sat_labels = [f'Level {level}' for level in y_edges]
+    plt.yticks(y_edges + 0.25, sat_labels)
+    plt.title(f'{title} Pixels per Hue-Saturation Bin')
+    plt.xlabel('Hue Bin Number')
+    plt.ylabel('Saturation Level', labelpad=10)
+    plt.savefig(dest_dir_path)
     plt.show()
+
+
