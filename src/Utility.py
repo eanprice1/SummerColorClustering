@@ -68,7 +68,7 @@ def generate_histogram(file_paths: list, title, dest_dir_path):
     plt.xticks(x_edges[::2] * 2, x_edges[::2])
     sat_labels = [f'Level {level}' for level in y_edges]
     plt.yticks(y_edges + 0.25, sat_labels)
-    plt.title(f'{title} Pixels per Hue-Saturation Bin')
+    plt.title(f'{title} Pixels Per Hue-Saturation Bin')
     plt.xlabel('Hue Bin Number')
     plt.ylabel('Saturation Level', labelpad=10)
     plt.savefig(dest_dir_path)
