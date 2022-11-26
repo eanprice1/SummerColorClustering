@@ -11,8 +11,10 @@ def main():
 
     print(f'Early Summer Count: {len(orig_early_summer_files)}')
     print(f'Late Summer Count: {len(orig_late_summer_files)}')
+    print(f'Resizing and Saving Early Summer Images')
     early_summer_paths = Util.image_preprocessing(orig_early_summer_files, new_early_summer_path)
     print('Completed Early Summer Preprocessing')
+    print(f'Resizing and Saving Late Summer Images')
     late_summer_paths = Util.image_preprocessing(orig_late_summer_files, new_late_summer_path)
     print('Complete Late Summer Preprocessing')
     Util.generate_histogram(early_summer_paths, 'Early Summer', 'Resources/Outputs/EarlySummerHistogram')
